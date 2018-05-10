@@ -12,6 +12,13 @@ namespace OberonLang {
     }
     return _instance; 
   }
+  
+  void Environment::free(){
+    if(_instance != 0){
+      delete _instance;
+      _instance = 0;
+    }
+  }
 
   void Environment::env(std::string var, Value* value) {
     if(_env->empty()) {

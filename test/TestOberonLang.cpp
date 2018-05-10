@@ -36,7 +36,6 @@ TEST (AddExpression, RealAdd) {
   delete result;
 }
 
-/* !TODO: desalocar memória */
 TEST (TestAssignment, SimpleAssignment) {
   IntValue *value = new IntValue(10);
   Assignment* assignment = new Assignment("x", value);
@@ -44,8 +43,26 @@ TEST (TestAssignment, SimpleAssignment) {
   
   EXPECT_EQ (10, ((IntValue*)Environment::instance()->lookup("x")->eval())->value());
   
+  Environment::free();
   delete value;
   delete assignment;
+}
+
+TEST (TestAssignment, AssignmentAdd) {
+  IntValue *v1 = new IntValue(10), *v2 = new IntValue(12);
+  AddExpression *exp = new AddExpression(v1, v2);
+  Assignment* assignment = new Assignment("x", exp);
+  assignment->run();
+  IntValue *result = (IntValue *)Environment::instance()->lookup("x")->eval();
+  
+  EXPECT_EQ (22, result->value());
+  
+  Environment::free();
+  delete exp;
+  delete v1;
+  delete v2;
+  delete assignment;
+  delete result;
 }
 
 TEST (SubExpression, SimpleSub) {
